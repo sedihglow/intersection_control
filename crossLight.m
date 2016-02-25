@@ -1,4 +1,4 @@
-% - 
+% - changes the states of the given street directions lights
 %{
     James Ross
     name 2
@@ -12,8 +12,8 @@ function crossLights(streetDirection, state)
     % where my #defines at? D: Assume program is consistant with these values
     HIGH = 1;
     LOW  = 0;
-    NS   = 0;   % represents NS street EW crosswalk
-    EW   = 1;   % represents EW street NS crosswalk 
+    NS   = 0;   % represents EW crosswalk
+    EW   = 1;   % represents NS crosswalk 
     if(streetDirection == NS)
         if(state == HIGH)
             digiWriteToPin(ljHl, 1, HIGH); % NS crosswalk white 

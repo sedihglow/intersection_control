@@ -7,8 +7,10 @@
     filename: errMsg.m
 %}
 
-function errMsg(err, message)
+function errMsg(err, message, pinNum, state)
+    % TODO: have the pin number and state append to message
     if(err > 0)
+        Error_Message(Error);
         error(message);
     end
 end

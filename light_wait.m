@@ -7,22 +7,33 @@
     filename: light_wait.m
 %}
 
+function light_wait(ljHl, direction, waitTime)
+    HIGH      = 1;
+    LOW       = 0;
+    NS        = 0;  % represents NS crosswalk
+    EW        = 1;  % represents EW crosswalk
+    state     = 0;  % state of the button. High after 1 button press
+    currTime  = 0;  % current time that has occured due to pause functions.
+    pauseTime = 0.1;% time paused before checking crosswalk.
+    crossDiv  = 4;  % time to divide the wait time to determin crossPriority
 
-
-function light_wait(waitTime)
-    currTime      = 0; % current time that has occured due to pause functions.
-    pauseTime     = 0; % time paused before checking crosswalk.
-    prevPressed   = 0; % changes to a 1 if the crosswalk button has registered
-    crossDiv      = 4; % time to divide the wait time to determin crossPriority
     crossPriority = waitTime/crossDiv; % time cut from waitTime for cross walk
 
     while(currTime < waitTime)
-        % TODO: check the crosswalk
-        if( %{ button was pressed && %} prevPressed == 0)
-            currTime = currTime + crossPriority;
-            prevPressed = 1;
+        if(state == 0) % button was never pressed 
+            if(direction  == NS)
+               state = digiRead(ljHl, 4) % NS crosswalk buttons
+            else
+               state = digiRead(ljHl, 5) % EW crosswalk buttons
+            end;end;
+
+            if(state == 1) % button was pressed
+                currTime = currTime + crossPriority;
+                prevPressed = 1;
+            end
         end
+
         pause(pauseTime);
         currTime = currTime + pauseTime;
-    end 
-end
+    end % end while
+end 
