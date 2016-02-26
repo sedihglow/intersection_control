@@ -13,22 +13,22 @@ function initialize(ljHl)
     LOW  = 0;
 
     % power on all red lights, errMsg checks the errno flag.
-    digiWriteToPin(ljHL,  0, HIGH); % NS crosswalk    red
-    digiWriteToPin(ljHl,  2, HIGH); % EW crosswalk    red
-    digiWriteToPin(ljHl,  8, HIGH); % NS turn lane    red
-    digiWriteToPin(ljHl, 11, HIGH); % NS forward lane red
-    digiWriteToPin(ljHl, 14, HIGH); % EW turn lane    red
-    digiWriteToPin(ljHl, 17, HIGH); % EW forward lane red
+    digiWrite(ljHL,  0, HIGH); % NS crosswalk    red
+    digiWrite(ljHl,  2, HIGH); % EW crosswalk    red
+    digiWrite(ljHl,  8, HIGH); % NS turn lane    red
+    digiWrite(ljHl, 11, HIGH); % NS forward lane red
+    digiWrite(ljHl, 14, HIGH); % EW turn lane    red
+    digiWrite(ljHl, 17, HIGH); % EW forward lane red
 
     % turn off all other lights in case they are on... probably wouldnt be tho.
-    digiWriteToPin(ljHl,  1, LOW); % NS crosswalk    white 
-    digiWriteToPin(ljHl,  3, LOW); % EW crosswalk    white
-    digiWriteToPin(ljHl,  6, LOW); % NS turn lane    green
-    digiWriteToPin(ljHl,  7, LOW); % NS turn lane    yellow
-    digiWriteToPin(ljHl,  9, LOW); % NS forward lane green
-    digiWriteToPin(ljHl, 10, LOW); % NS forward lane yellow
-    digiWriteToPin(ljHl, 12, LOW); % EW turn lane    green
-    digiWriteToPin(ljHl, 13, LOW); % EW turn lane    yellow
-    digiWriteToPin(ljHl, 15, LOW); % EW forward lane green
-    digiWriteToPin(ljHl, 16, LOW); % EW forward lane yellow
+    digiWrite(ljHl,  1, LOW); % NS crosswalk    white 
+    digiWrite(ljHl,  3, LOW); % EW crosswalk    white
+    digiWrite(ljHl,  6, LOW); % NS turn lane    green
+    digiWrite(ljHl,  7, LOW); % NS turn lane    yellow
+    digiWrite(ljHl,  9, LOW); % NS forward lane green
+    digiWrite(ljHl, 10, LOW); % NS forward lane yellow
+    digiWrite(ljHl, 12, LOW); % EW turn lane    green
+    digiWrite(ljHl, 13, LOW); % EW turn lane    yellow
+    digiWrite(ljHl, 15, LOW); % EW forward lane green
+    digiWrite(ljHl, 16, LOW); % EW forward lane yellow
 end

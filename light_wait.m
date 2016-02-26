@@ -20,14 +20,14 @@ function light_wait(ljHl, direction, waitTime)
     crossPriority = waitTime/crossDiv; % time cut from waitTime for cross walk
 
     while(currTime < waitTime)
-        if(state == 0) % button was never pressed 
+        if(state == LOW) % button was never pressed 
             if(direction  == NS)
                state = digiRead(ljHl, 4) % NS crosswalk buttons
             else
                state = digiRead(ljHl, 5) % EW crosswalk buttons
             end;end;
 
-            if(state == 1) % button was pressed
+            if(state == HIGH) % button was pressed
                 currTime = currTime + crossPriority;
                 prevPressed = 1;
             end

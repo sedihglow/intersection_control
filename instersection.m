@@ -10,7 +10,7 @@
 ljud_LoadDriver;    % LabJack drivers
 ljud_Constants;     % LabJack constants
 
-[errno, ljHl] = ljud_OpenLabJack(LJ_dtU3, LJ_ctUSB. '1', 1_); % locate LabJack
+[errno, ljHl] = ljud_OpenLabJack(LJ_dtU3, LJ_ctUSB, '1', 1); % locate LabJack
 if(errno > 0)
     % TODO: Make it print what the errno value is if there is a failure.
     error('Failed to open connection to labjack');
