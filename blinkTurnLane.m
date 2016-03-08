@@ -8,10 +8,6 @@
 %}
 
 function blinkTurnLane(jlHl, streetDirection, timeToBlink)
-    HIGH      = 1;
-    LOW       = 0;
-    NS        = 0; % represents NS crosswalk
-    EW        = 1; % represents EW crosswalk
     currTime  = 0; % current time paused
     pauseTime = 0; % time between blinks
     state     = 0; % state of the button. High after 1 button press
@@ -19,18 +15,18 @@ function blinkTurnLane(jlHl, streetDirection, timeToBlink)
     while(currTime < waitTime)
         if(direction  == NS)
             if(state == LOW)
-                digiWrite(ljHl,  6, HIGH); % NS turn lane green
+                digiWrite(ljHl,TNS_GRN, HIGH); % NS turn lane green
                 state = HIGH;
             else % state == HIGH
-                digiWrite(ljHl,  6, LOW);  % NS turn lane green
+                digiWrite(ljHl, TNS_GRN, LOW); % NS turn lane green
                 state = LOW;
             end;end;
         else % direction is EW
             if(state == LOW)
-                digiWrite(ljHl,  6, HIGH); % NS turn lane green
+                digiWrite(ljHl, TEW_GRN, HIGH); % EW turn lane green
                 state = HIGH;
             else % state == HIGH
-                digiWrite(ljHl,  6, LOW);  % NS turn lane green
+                digiWrite(ljHl, TEW_GRN, LOW); % EW turn lane green
                 state = LOW;
             end;end;
         end;end; % end direction if-else

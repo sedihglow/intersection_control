@@ -8,9 +8,8 @@
 %}
 
 function errMsg(err, message, pinNum, state)
-    % TODO: have the pin number and state append to message
-    if(err > 0)
-        Error_Message(Error);
-        error(message);
+    if(err > NOERR)
+        fprintf(stderr, message 'pinNum: %d state: %d', pinNum, state);
+        Error_Message(err);
     end
 end
