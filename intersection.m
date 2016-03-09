@@ -1,8 +1,8 @@
 % - Controls the LED's on a 4 way intersection for ece102 project
 %{
     James Ross
-    name 2
-    name 3
+    Adbikadir Musa
+    Jacob Metoxen
 
     filename: intersection.m
 %}
@@ -10,7 +10,8 @@
 clc
 clear
 
-% TODO: Does matlab have a #define equivalent? Preventing globals
+% TODO: Does matlab have a #define equivalent? Preventing globals. 
+%       Want my C back D: Assembly! Something!
 % pin declarations
 global CNS_RED;      % NS crosswalk red
        CNS_RED = 0; 
@@ -51,13 +52,13 @@ global FEW_RED;      % EW forward lane red
 
 % general variables for functionality
 global HIGH;     % HIGH voltage
-       HIGH = 1;
-global LOW;;     % LOW voltage
-       LOW  = 0;
+       HIGH  = 1;
+global LOW;      % LOW voltage
+       LOW   = 0;
 global NS;       % north/south direction
-       NS   = 0;
+       NS    = 0;
 global EW;       % east/west direction
-       EW   = 1;
+       EW    = 1;
 global NOERR;    % no error in errno
        NOERR = 0;
 global STDOP;    % standard operation
@@ -66,6 +67,14 @@ global DEBUG;    % initiate debug
        DEBUG = 3;
 global DBL;      % go double speed 
        DBL   = 2;
+global GREEN;    % Sets a signal for green from red.
+       GREEN = 1;
+global RED;      % Sets a signal for red to green.
+       RED   = 0;
+global NOCROSS; % run with no crosswalk
+       NOCROSS  = 0; 
+global WITHCROSS; % run with a crosswalk
+       WITHCROSS = 1; 
 
 ljud_LoadDriver; % LabJack drivers
 ljud_Constants;  % LabJack constants
@@ -85,15 +94,36 @@ if(errno > noErr)
 end
 
 initialize();  % initialize the intersection for first time use.
+while(mode == DEBUG) % present menu even after closing DEBUG
+    mode = menuOptions();
+    if(mode == DEBUG)
+        toDb = 0;
+        while(toDb < 8)
+            initialize(); % ensure fresh start for debug
+            toDb = debugMenu();
+            switch(toDb)
+                case 1
+                    debugCrosswalk(ljHl, NS);
+                case 2
+                    debugCrosswalk(ljHl, EW);
+                case 3
+                    debugStreet(ljHl, NOCROSS, NS);
+                case 4
+                    debugStreet(ljHl, NOCROSS, EW);
+                case 5
+                    debugStreet(ljHl, WITHCROSS, NS);
+                case 6
+                    debugStreet(ljHl, WITHCROSS, EW);
+                case 7
+                    normalOperation(ljHl, DEBUG);
+                case 8
+                    break;
+                otherwise
+                    error('Invalid return from debugMenu() in intersection()');
+            end % end switch
+        end % while
+    end % end if
+    initialize();
+end % end while
 
-mode = menuOptions();
-   
-while(true)    % loop untill no more power is provided to the device.
-    if(mode == debug)
-        % initiate debug interface
-        
-    else
-        changeDirection(NS, mode); % crosswalk EW will change accordingly.
-        changeDirection(EW, mode); % crosswalk NS will change accordingly.
-    end; end;
-end
+normalOperation(ljHl, mode);

@@ -1,8 +1,8 @@
 % - blink the directions turn lane for the green light time.
 %{
     James Ross
-    name 2
-    name 3
+    Abdikadir Musa
+    Jacob Metoxen
 
     filename: blinkTurnLane.m
 %}
@@ -20,7 +20,7 @@ function blinkTurnLane(jlHl, streetDirection, timeToBlink)
             else % state == HIGH
                 digiWrite(ljHl, TNS_GRN, LOW); % NS turn lane green
                 state = LOW;
-            end;end;
+            end;
         else % direction is EW
             if(state == LOW)
                 digiWrite(ljHl, TEW_GRN, HIGH); % EW turn lane green
@@ -28,8 +28,8 @@ function blinkTurnLane(jlHl, streetDirection, timeToBlink)
             else % state == HIGH
                 digiWrite(ljHl, TEW_GRN, LOW); % EW turn lane green
                 state = LOW;
-            end;end;
-        end;end; % end direction if-else
+            end
+        end % end direction if-else
         pause(pauseTime);
         currTime = currTime + pauseTime;
     end % end while

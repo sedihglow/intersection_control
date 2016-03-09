@@ -1,8 +1,8 @@
 % - prints a given error message if an errno value is present
 %{
     James Ross
-    name 2
-    name 3
+    Abdikadir Musa
+    Jacob Metoxen
 
     filename: errMsg.m
 %}

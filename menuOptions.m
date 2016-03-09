@@ -1,16 +1,23 @@
 % - Functionality menu for 4 way intersection
 %{
     James Ross
-    name 2
-    name 3
+    Adbikadir Musa
+    Jacob Metoxen
 
     filename: menuOptions.m
 %}
 
 function mode = menuOptions()
-    fprintf('\nInput corresponding number for desired operation.\n');
-    fprintf('1 : standard operation\n'
+    clc
+    fprintf('Input corresponding number for desired operation.\n'
+            '1 : standard operation\n'
             '2 : double speed operation.\n'
-            '3 : debug menu.\n');
-    mode = input('choice: ');
+            '3 : debug menu.\n'
+            '4 : exit program\n');
+    % TODO: Check behavior when nothing is entered and str2num returns []
+    % TODO: Check behavior when using a string instead of numbers in while
+    while(debugChoice < '1' && debugChoice > '3')
+        mode = input('choice: ');
+    end
+    mode = str2num(mode);
 end

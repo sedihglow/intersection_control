@@ -1,8 +1,8 @@
 % - initialize the 4 way intersection including crosswalks.
 %{
     James Ross
-    name 2
-    name 3
+    Adbikadir Musa
+    Jacob Metoxen
 
     filename: initialize.m
 %}

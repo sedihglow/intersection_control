@@ -1,8 +1,8 @@
 % - Reads a given LabJack pin.
 %{
     James Ross
-    name 2
-    name 3
+    Adbikadir Musa
+    Jacob Metoxen
 
     filename: digiRead.m
 %}

@@ -14,7 +14,6 @@ TODO:
 2 : double speed
 3 : debug
 
-
 ----Debug menu----
 1: NS crosswalk buttons (no light interactions)
 2: EW crosswalk buttons (no light interactions)

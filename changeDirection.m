@@ -1,23 +1,23 @@
 % - execute functionality for street north/sound (0), crosswalk east/west (1)
 %{
     James Ross
-    name 2
-    name 3
+    Abdikadir Musa
+    Jacob Metoxen
 
     filename: changeDirection.m
 %}
 
 % streetDirection, 0 for NS street, EW crosswalk
 %                  1 for EW street, NS crosswalk
-function changeDirection(streetDirection, mode)
+function changeDirection(ljHl, streetDirection, mode)
     % light timers
-    timeTurnGreen = 0; % length for a turn lane green light
-    timeYellow    = 0; % length for a yellow light
-    timeFwdGreen  = 0; % length for a forward green light
+    timeTurnGreen = 7; % length for a turn lane green light
+    timeYellow    = 3.6; % length for a yellow light
+    timeFwdGreen  = 12; % length for a forward green light
     
     % times cut in half. (double speed)
     halfTurnGreen  = timeTurnGreen/2;
-    halfYellow = timeYellow/2;
+    halfYellow     = timeYellow/2;
     halfFwdGreen   = timeFwdGreen/2;
 
     if(streetDirection ~= NS && streetDirection ~= EW)
@@ -27,19 +27,21 @@ function changeDirection(streetDirection, mode)
         % set turn lane to green for turnGreen time.
         digiWrite(ljHl, TNS_RED, LOW);  % NS turn lane red
         digiWrite(ljHl, TNS_GRN, HIGH); % NS turn lane green
-        if(mode == STDOP)
-            wait(timeTurnGreen);
+        if(mode == DBL)
+            light_wait(halfTurnGreen, STDOP);
+        else if(mode == DEBUG)
+            light_wait(timeTurnGreen, DEBUG);
         else
-            wait(halfTurnGreen);
-        end; end;
+            light_wait(timeTurnGreen, STDOP);
+        end
         digiWrite(ljHl, TNS_GRN, LOW);  % NS turn lane green
         % set turn lane to yellow for turnYellow time.
         digiWrite(ljHl, TNS_YLW, HIGH); % NS turn lane yellow
-        if(mode == STDOP)
-            pause(timeYellow);
-        else 
+        if(mode == DBL)
             pause(halfYellow);
-        end
+        else
+            pause(timeYellow);
+        end 
         digiWrite(ljHl, TNS_YLW, LOW);  % NS turn lane yellow
 
         % set turn lane red
@@ -64,11 +66,11 @@ function changeDirection(streetDirection, mode)
         % set the turn lane and forward lane yellow
         digiWrite(ljHl, TNS_YLW, HIGH); % NS turn lane yellow
         digiWrite(ljHl, FNS_YLW, HIGH); % NS forward lane yellow
-        if(mode == STDOP)
-            pause(timeYellow);
-        else
+        if(mode == DBL)
             pause(halfYellow);
-        end; end;
+        else
+            pause(timeYellow);
+        end
         digiWrite(ljHl, TNS_YLW, LOW);  % NS turn lane yellow
         digiWrite(ljHl, FNS_YLW, LOW);  % NS forward lane yellow
 
@@ -80,20 +82,22 @@ function changeDirection(streetDirection, mode)
         % set turn lane to green for turnGreen time.
         digiWrite(ljHl, TEW_RED, LOW);  % EW turn lane red
         digiWrite(ljHl, TEW_GRN, HIGH); % EW turn lane green
-        if(mode == STDOP)
-            wait(TimeTurnGreen);
+        if(mode == DBL)
+            light_wait(halfTurnGreen, STDOP);
+        else if(mode == DEBUG)
+            light_wait(timeTurnGreen, DEBUG);
         else
-            wait(halfTurnGreen);
+            light_wait(TimeTurnGreen, STDOP);
         end; end;
         digiWrite(ljHl, TEW_GRN, LOW);  % EW turn lane green
 
         % set turn lane to yellow for turnYellow time.
         digiWrite(ljHl, TEW_YLW, HIGH); % EW turn lane yellow
-        if(mode == STDOP)
-            pause(timeYellow);
-        else
+        if(mode == DBL)
             pause(halfYellow);
-        end; end;
+        else
+            pause(timeYellow);
+        end
         digiWrite(ljHl, TEW_YLW, LOW);  % EW turn lane yellow
 
         % set turn lane red
@@ -118,11 +122,11 @@ function changeDirection(streetDirection, mode)
         % set the turn lane and forward lane yellow
         digiWrite(ljHl, TEW_YLW, HIGH); % EW turn lane yellow
         digiWrite(ljHl, FEW_YLW, HIGH); % EW forward lane yellow
-        if(mode == halfYellow)
-            pause(timeYellow);
-        else
+        if(mode == DBL)
             pause(halfYellow);
-        end; end;
+        else
+            pause(timeYellow);
+        end
         digiWrite(ljHl, FEW_YLW, LOW);  % EW forward lane yellow
         digiWrite(ljHl, TEW_YLW, LOW);  % EW turn lane yellow
 
@@ -130,5 +134,5 @@ function changeDirection(streetDirection, mode)
         digiWrite(ljHl, TEW_RED, HIGH); % EW turn lane red
         digiWrite(ljHl, FEW_RED, HIGH); % EW forward lane red
         crossLight(ljHl, NS, LOW);
-    end; end;
+    end
 end
