@@ -9,6 +9,14 @@
 
 % state defines wether to send the crosswalk lights GREEN or RED
 function crossLights(ljHl, streetDirection, state)
+    global CNS_RED;
+    global CNS_WHT;
+    global CEW_RED;
+    global CEW_WHT;
+    global HIGH;
+    global LOW;
+    global GREEN;
+    global NS;
     if(streetDirection == NS)
         if(state == GREEN)
             digiWrite(ljHl, CNS_RED, LOW);  % NS crosswalk red

@@ -81,49 +81,34 @@ ljud_Constants;  % LabJack constants
 
 % last 2 values passed in ljud_OpenLabJack '1', 1, dault values.
 [errno, ljHl] = ljud_OpenLabJack(LJ_dtU3, LJ_ctUSB, '1', 1); % locate LabJack
-if(errno > noErr)
-    fprintf(stderr,'Failed to open connection to labjack: error#: %d', errno);
+if(errno > NOERR)
+    fprintf(2,'Failed to open connection to labjack: error#: %d\n', errno);
     Error_Message(errno);
+    error('terminating program'); % cleanly exit the program
 end
 
 % last 3 numbers passed in ljud_ePut is 0,0,0, default values.
 errno = ljud_ePut(ljHl, LJ_ioPIN_CONFIGURATION_RESET, 0, 0, 0); % default settings
-if(errno > noErr)
-    fprintf(stderr,'Failure to set default LabJack settings: error#: %d', errno);
+if(errno > NOERR)
+    fprintf(2,'Failure to set default LabJack settings: error#: %d\n', errno);
     Error_Message(errno);
+    error('terminating program'); % cleanly exit the program
 end
 
-initialize();  % initialize the intersection for first time use.
-while(mode == DEBUG) % present menu even after closing DEBUG
+mode = 0; % what mode to operate the intersection in.
+initialize(ljHl);  
+while(mode == DEBUG || (mode == 0)) % present menu even after closing DEBUG
     mode = menuOptions();
     if(mode == DEBUG)
         toDb = 0;
         while(toDb < 8)
-            initialize(); % ensure fresh start for debug
-            toDb = debugMenu();
-            switch(toDb)
-                case 1
-                    debugCrosswalk(ljHl, NS);
-                case 2
-                    debugCrosswalk(ljHl, EW);
-                case 3
-                    debugStreet(ljHl, NOCROSS, NS);
-                case 4
-                    debugStreet(ljHl, NOCROSS, EW);
-                case 5
-                    debugStreet(ljHl, WITHCROSS, NS);
-                case 6
-                    debugStreet(ljHl, WITHCROSS, EW);
-                case 7
-                    normalOperation(ljHl, DEBUG);
-                case 8
-                    break;
-                otherwise
-                    error('Invalid return from debugMenu() in intersection()');
-            end % end switch
+            initialize(ljHl); % ensure fresh start for debug
+            toDb = debugMenu(ljHl);
         end % while
     end % end if
-    initialize();
+    initialize(ljHl); % initialize the intersection for first time use.
 end % end while
 
-normalOperation(ljHl, mode);
+if(mode == STDOP || mode == DBL)
+    normalOperation(ljHl, mode);
+end

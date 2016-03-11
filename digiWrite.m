@@ -8,6 +8,7 @@
 %}
 
 function digiWrite(ljHl, pinNum, state)
+    ljud_Constants;  % LabJack constants
     % last number passed in ljud_ePut is 0, default value.
     errno = ljud_ePut(ljHl, LJ_ioPUT_DIGITAL_BIT, pinNum, state,0);
     pause(0.2);

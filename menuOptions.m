@@ -9,15 +9,15 @@
 
 function mode = menuOptions()
     clc
-    fprintf('Input corresponding number for desired operation.\n'
-            '1 : standard operation\n'
-            '2 : double speed operation.\n'
-            '3 : debug menu.\n'
-            '4 : exit program\n');
-    % TODO: Check behavior when nothing is entered and str2num returns []
-    % TODO: Check behavior when using a string instead of numbers in while
-    while(debugChoice < '1' && debugChoice > '3')
-        mode = input('choice: ');
+    mode = 0;
+    fprintf('Input corresponding number for desired operation.\n')
+    fprintf('1 : Standard operation.\n');
+    fprintf('2 : Double speed operation.\n');
+    fprintf('3 : Debug menu.\n');
+    fprintf('4 : Exit program.\n');
+    mode = 0;
+    while((mode < 1 || mode > 4) || isnan(mode) == 1)
+        mode = input('choice: ', 's');
+        mode = str2double(mode);
     end
-    mode = str2num(mode);
 end

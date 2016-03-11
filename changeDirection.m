@@ -10,6 +10,26 @@
 % streetDirection, 0 for NS street, EW crosswalk
 %                  1 for EW street, NS crosswalk
 function changeDirection(ljHl, streetDirection, mode)
+    global TNS_GRN;      % NS turn lane green
+    global TNS_YLW;      % NS turn lane yellow
+    global TNS_RED;      % NS turn lane red
+    global FNS_GRN;      % NS forward lane green
+    global FNS_YLW;      % NS forward lane yellow
+    global FNS_RED;      % NS forward lane red
+    global TEW_GRN;      % EW turn lane green
+    global TEW_YLW;      % EW turn lane yellow
+    global TEW_RED;      % EW turn lane red
+    global FEW_GRN;      % EW forward lane green
+    global FEW_YLW;      % EW forward lane yellow
+    global FEW_RED;      % EW forward lane red
+    global HIGH;     % HIGH voltage
+    global LOW;      % LOW voltage
+    global NS;       % north/south direction
+    global EW;       % east/west direction
+    global STDOP;    % standard operation
+    global DEBUG;    % initiate debug
+    global DBL;      % go double speed 
+
     % light timers
     timeTurnGreen = 7; % length for a turn lane green light
     timeYellow    = 3.6; % length for a yellow light
@@ -19,6 +39,8 @@ function changeDirection(ljHl, streetDirection, mode)
     halfTurnGreen  = timeTurnGreen/2;
     halfYellow     = timeYellow/2;
     halfFwdGreen   = timeFwdGreen/2;
+    
+    crossState = LOW; % current state of crosswalk button
 
     if(streetDirection ~= NS && streetDirection ~= EW)
         error('changeDirection: invalid input. 0 == street NS, 1 == street EW');
@@ -28,12 +50,14 @@ function changeDirection(ljHl, streetDirection, mode)
         digiWrite(ljHl, TNS_RED, LOW);  % NS turn lane red
         digiWrite(ljHl, TNS_GRN, HIGH); % NS turn lane green
         if(mode == DBL)
-            light_wait(halfTurnGreen, STDOP);
+            light_wait(ljHl, NS, halfTurnGreen);
         else if(mode == DEBUG)
-            light_wait(timeTurnGreen, DEBUG);
-        else
-            light_wait(timeTurnGreen, STDOP);
+                light_wait(ljHl, NS, timeTurnGreen);
+            else
+                light_wait(ljHl, NS, timeTurnGreen);
+            end
         end
+        crossState = LOW;
         digiWrite(ljHl, TNS_GRN, LOW);  % NS turn lane green
         % set turn lane to yellow for turnYellow time.
         digiWrite(ljHl, TNS_YLW, HIGH); % NS turn lane yellow
@@ -52,12 +76,18 @@ function changeDirection(ljHl, streetDirection, mode)
         digiWrite(ljHl, FNS_GRN, HIGH); % NS forward lane green
 
         % Change the cross walks
-        crossLight(ljHl, EW, HIGH);
+        crossLights(ljHl, EW, HIGH);
 
-        pause(1); % momentary pause keeping turn lane red
+        pause(1); % keep turn lane red for pedestrians to start crossing
 
         % set turn lane blinking green
-        blinkTurnLane(ljHl, NS, timeFwdGreen);
+        digiWrite(ljHl, TNS_RED, LOW); % EW turn lane red
+        if(mode == DBL)
+            blinkTurnLane(ljHl, NS, halfFwdGreen, crossState);
+        else
+            blinkTurnLane(ljHl, NS, timeFwdGreen, crossState);
+        end 
+        crossState = LOW;
         
         % turn off green lights to change from go on street.
         digiWrite(ljHl, TNS_GRN, LOW);  % NS turn lane green
@@ -77,18 +107,19 @@ function changeDirection(ljHl, streetDirection, mode)
         % set the turn lane, forward lane and crosswalk to red
         digiWrite(ljHl, TNS_RED, HIGH); % NS turn lane red
         digiWrite(ljHl, FNS_RED, HIGH); % NS forward lane red
-        crossLight(ljHl, EW, LOW);
+        crossLights(ljHl, EW, LOW);
     else % EW street NW crosswalk
         % set turn lane to green for turnGreen time.
         digiWrite(ljHl, TEW_RED, LOW);  % EW turn lane red
         digiWrite(ljHl, TEW_GRN, HIGH); % EW turn lane green
         if(mode == DBL)
-            light_wait(halfTurnGreen, STDOP);
+            crossState = light_wait(ljHl, EW, halfTurnGreen);
         else if(mode == DEBUG)
-            light_wait(timeTurnGreen, DEBUG);
-        else
-            light_wait(TimeTurnGreen, STDOP);
-        end; end;
+                crossState = light_wait(ljHl, EW, timeTurnGreen);
+            else
+                crossState = light_wait(ljHl, EW, timeTurnGreen);
+            end
+        end
         digiWrite(ljHl, TEW_GRN, LOW);  % EW turn lane green
 
         % set turn lane to yellow for turnYellow time.
@@ -108,13 +139,19 @@ function changeDirection(ljHl, streetDirection, mode)
         digiWrite(ljHl, FEW_GRN, HIGH); % EW forward lane green
 
         % Change the cross walks
-        crossLight(ljHl, NS, HIGH);
+        crossLights(ljHl, NS, HIGH);
 
-        pause(1); % momentary pause keeping turn lane red
+        pause(1); % keep turn lane red for pedestrians to start crossing
 
         % set turn lane blinking green 
-        blinkTurnLane(ljHl, EW, timeFwdGreen);
-
+        digiWrite(ljHl, TEW_RED, LOW); % EW turn lane red
+        if(mode == DBL)
+            blinkTurnLane(ljHl, EW, halfFwdGreen, crossState);
+        else
+            blinkTurnLane(ljHl, EW, timeFwdGreen, crossState);
+        end 
+        crossState = LOW;
+        
         % turn off green lights to change from go on street.
         digiWrite(ljHl, TEW_GRN, LOW); % EW turn lane green
         digiWrite(ljHl, FEW_GRN, LOW); % EW forward lane green
@@ -133,6 +170,6 @@ function changeDirection(ljHl, streetDirection, mode)
         % set the turn lane, forward lane and crosswalk to red
         digiWrite(ljHl, TEW_RED, HIGH); % EW turn lane red
         digiWrite(ljHl, FEW_RED, HIGH); % EW forward lane red
-        crossLight(ljHl, NS, LOW);
+        crossLights(ljHl, NS, LOW);
     end
 end

@@ -8,8 +8,11 @@
 %}
 
 function errMsg(err, message, pinNum, state)
+    global NOERR;
     if(err > NOERR)
-        fprintf(stderr, message 'pinNum: %d state: %d', pinNum, state);
+        fprintf(2, message);
+        fprintf('pinNum: %d state: %d\n', pinNum, state);
         Error_Message(err);
+        error('Terminating program'); % cleanly exit
     end
 end

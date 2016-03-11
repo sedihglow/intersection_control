@@ -8,6 +8,11 @@
 %}
 
 function debugStreet(ljHl, cross, direction)
+    global NS;
+    global NOCROSS;
+    global DEBUG;
+    global STDOP;
+    
     if(direction == NS)
         if(cross == NOCROSS)
             changeDirection(ljHl, NS, DEBUG); % disables crosswalks

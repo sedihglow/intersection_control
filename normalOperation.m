@@ -8,6 +8,10 @@
 %}
 
 function normalOperation(ljHl, mode)
+    global DEBUG;
+    global NS;
+    global EW;
+    
     if(mode == DEBUG) % Single interation through intersection for DEBUG
             changeDirection(ljHl, NS, mode); % crosswalk EW will change accordingly.
             changeDirection(ljHl, EW, mode); % crosswalk NS will change accordingly.
